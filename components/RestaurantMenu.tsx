@@ -2,29 +2,31 @@ export default function RestaurantMenu() {
   // 🧠 Estructura de datos: Un array de categorías, cada una con sus platos
   const menu = [
     {
-      categoria: "Hamburguesas Artesanales",
+      categoria: "Individuales",
       icono: "🍔",
       platos: [
-        { nombre: "La Sabaneta Clásica", desc: "Carne 200g, cheddar fundido, bacon crocante y cebolla crispy.", precio: "$8.500" },
-        { nombre: "Doble Adrenalina", desc: "Doble carne smash, doble cheddar, salsa secreta de la casa.", precio: "$11.200" },
-        { nombre: "Veggie Racer", desc: "Medallón de lentejas y quinoa, palta, tomate y mayonesa de albahaca.", precio: "$7.800" },
+        { nombre: "Quesadilla", desc: "Queso, Pollo, Quitlacoche, Hongos.", precio: "$35.00" },
+        { nombre: "Tlacollo", desc: "Queso, Pollo, Quitlacoche, Hongos.", precio: "$35.00" },
+        { nombre: "Sopes", desc: "Queso, Pollo, Quitlacoche, Hongos,Chorizo Rojo, Chorizo Verde, Cecina Natural, Cecina adobada.", precio: "$40.00" },
+        { nombre: "Taco", desc: "Chorizo Rojo, Chorizo Verde, Cecina Natural, Cecina adobada, Cebollas y Nopales", precio: "$40.00" },
       ]
     },
     {
-      categoria: "Parrilla & Picadas",
+      categoria: "Paquetes",
       icono: "🥩",
       platos: [
-        { nombre: "Picada La Sabaneta", desc: "Quesos, fiambres, salame, aceitunas y pan casero (para 2 personas).", precio: "$12.000" },
-        { nombre: "Choripán de la Pista", desc: "Chorizo criollo, chimichurri casero y salsa criolla.", precio: "$4.500" },
-        { nombre: "Empanadas de Carne (x6)", desc: "Cortadas a cuchillo, fritas o al horno.", precio: "$5.400" },
+        { nombre: "Piloto", desc: "Chorizo Rojo, Chorizo Verde, Cecina Natural, Cecina adobada, Cebollas y Nopales (para 2 personas).", precio: "$350.00" },
+        { nombre: "Pits 1", desc: "Chorizo Rojo, Chorizo Verde, Cecina Natural, Cecina adobada, Cebollas y Nopales (para 4 personas).", precio: "$550.00" },
+        { nombre: "Pits 2", desc: "Chorizo Rojo, Chorizo Verde, Cecina Natural, Cecina adobada, Cebollas y Nopales (para 8 personas).", precio: "$800.00" },
       ]
     },
     {
-      categoria: "Bebidas & Tragos",
+      categoria: "Bebidas",
       icono: "🍺",
       platos: [
-        { nombre: "Cerveza Artesanal (Pinta)", desc: "Rubia, Roja o IPA de cervecería local.", precio: "$3.200" },
-        { nombre: "Gaseosas / Agua", desc: "Coca-Cola, Sprite, Agua mineral (500ml).", precio: "$1.500" },
+        { nombre: "Cerveza 355 ml.", desc: "Corona, Victoria, Indio, Tecate, Modelo.", precio: "$50.00" },
+        { nombre: "Cerveza 1.2 L.", desc: "Corona, Victoria, Indio, Tecate, Modelo.", precio: "$120.00" },
+        { nombre: "Refrescos", desc: "Coca-Cola, Sprite, Agua mineral.", precio: "$1.500" },
         { nombre: "Mojito de la Casa", desc: "Ron, hierbabuena, lima y soda.", precio: "$4.800" },
       ]
     }
