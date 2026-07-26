@@ -21,7 +21,7 @@ export default function Home() {
           <span className="text-red-500">MOTO</span>ÓDROMO
         </h1>
         <h2 className="text-2xl md:text-3xl font-light text-zinc-300 mb-6 text-center">
-          LA SABANETA
+          SABANETA
         </h2>
         <p className="text-zinc-400 text-center max-w-xl mb-8 text-lg">
           Go-karts, Motódromo, Gotcha y restaurante. La adrenalina te espera.

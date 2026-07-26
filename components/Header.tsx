@@ -23,9 +23,9 @@ export default function Header() {
             {/* LOGO */}
             <div className="flex-shrink-0">
               <a href="/" className="text-2xl font-black tracking-tighter">
-                <span className="text-red-500">LA </span>
+                <span className="text-red-500">SABA</span>
 
-                <span className="text-white"> SABANETA</span>
+                <span className="text-white">NETA</span>
               </a>
             </div>
 
