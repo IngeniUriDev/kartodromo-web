@@ -101,7 +101,7 @@ export default function Header() {
               Ubicación
             </a>
             <a
-              href="https://wa.me/5491100000000"
+              href="/reservar"
               className="bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-bold text-center transition-colors"
               onClick={() => setMenuOpen(false)}
             >
