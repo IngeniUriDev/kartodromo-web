@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { X, ZoomIn } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Gallery() {
   // Estado para controlar si el Lightbox (visor de imagen grande) está abierto
@@ -10,12 +11,11 @@ export default function Gallery() {
 
   // Array de fotos (usamos imágenes de Unsplash como ejemplo realista)
   const fotos = [
-    { id: 1, src: "https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?w=800&q=80", alt: "Go-Kart en la pista", categoria: "Kartódromo" },
-    { id: 2, src: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800&q=80", alt: "Moto de enduro en acción", categoria: "Motódromo" },
-    { id: 3, src: "https://images.unsplash.com/photo-1596728328189-21669461727e?w=800&q=80", alt: "Jugadores de Gotcha", categoria: "Gotcha" },
-    { id: 4, src: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80", alt: "Restaurante y parrilla", categoria: "Restaurante" },
-    { id: 5, src: "https://images.unsplash.com/photo-1511994298241-608e28f14fde?w=800&q=80", alt: "Podio de ganadores", categoria: "Kartódromo" },
-    { id: 6, src: "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=800&q=80", alt: "Ambiente del restaurante", categoria: "Restaurante" },
+    { id: 1, src: "/kart1.jpg", alt: "Go-Kart en la pista", categoria: "Kartódromo" },
+    { id: 2, src: "/ksmo3.jpg", alt: "Moto de enduro en acción", categoria: "Motódromo" },
+    { id: 3, src: "/gotcha1.jpg", alt: "Jugadores de Gotcha", categoria: "Gotcha" }, // Si está directo en public
+    { id: 4, src: "/pistaks.jpg", alt: "Podio de ganadores", categoria: "Kartódromo" },
+    { id: 5, src: "/ksmo2.jpg", alt: "Ambiente del restaurante", categoria: "Eventos" },
   ];
 
   return (

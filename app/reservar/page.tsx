@@ -1,16 +1,16 @@
-'use client' // 👈 ¡IMPORTANTE! Esto le dice a Next.js que este componente necesita interactividad (useState, onClick, etc.)
+'use client'
 
-import { useState } from 'react'
+import Link from 'next/link'
+import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 
 export default function ReservarPage() {
-  // 1. Estados para controlar la interfaz
   const [loading, setLoading] = useState(false)
   const [mensaje, setMensaje] = useState('')
-
-  // 2. Estado para guardar lo que el usuario escribe en el formulario
+  const [servicios, setServicios] = useState<any[]>([])
+  
   const [formData, setFormData] = useState({
-    servicio_id: '', 
+    servicio_id: '',
     fecha: '',
     hora: '',
     numero_personas: 1,
@@ -18,7 +18,23 @@ export default function ReservarPage() {
     telefono: ''
   })
 
-  // 3. Función que actualiza el estado cuando el usuario escribe
+  // 🔥 NUEVO: Cargar servicios automáticamente desde la base de datos
+  useEffect(() => {
+    async function cargarServicios() {
+      const { data, error } = await supabase
+        .from('servicios')
+        .select('*')
+        .eq('activo', true)
+      
+      if (error) {
+        console.error('Error al cargar servicios:', error)
+      } else {
+        setServicios(data || [])
+      }
+    }
+    cargarServicios()
+  }, [])
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
@@ -26,20 +42,17 @@ export default function ReservarPage() {
     })
   }
 
-  // 4. Función que se ejecuta al hacer clic en "Confirmar Reserva"
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault() // Evita que la página se recargue al enviar
+    e.preventDefault()
     setLoading(true)
     setMensaje('')
 
-    // Validación básica
     if (!formData.servicio_id || !formData.fecha || !formData.hora || !formData.nombre_cliente) {
       setMensaje('⚠️ Por favor completa todos los campos obligatorios.')
       setLoading(false)
       return
     }
 
-    // 🚀 AQUÍ OCURRE LA MAGIA: Enviamos los datos a Supabase (Como enviar un mensaje a un Topic de Kafka)
     const { error } = await supabase
       .from('reservas')
       .insert([
@@ -50,17 +63,15 @@ export default function ReservarPage() {
           numero_personas: parseInt(formData.numero_personas.toString()),
           nombre_cliente: formData.nombre_cliente,
           telefono: formData.telefono,
-          estado: 'pendiente' // Estado inicial por defecto
+          estado: 'pendiente'
         }
       ])
 
-    // 5. Manejamos la respuesta de la base de datos
     if (error) {
       console.error('Error al reservar:', error)
       setMensaje('❌ Hubo un error al guardar la reserva. Revisa la consola.')
     } else {
       setMensaje('✅ ¡Reserva creada con éxito! Nos vemos en la pista.')
-      // Limpiamos el formulario para una nueva reserva
       setFormData({ servicio_id: '', fecha: '', hora: '', numero_personas: 1, nombre_cliente: '', telefono: '' })
     }
     
@@ -68,77 +79,175 @@ export default function ReservarPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6 text-center">🏎️ Reserva tu lugar</h1>
-      
-      {/* Mostrar mensaje de éxito o error */}
-      {mensaje && (
-        <div className={`p-4 mb-4 rounded-lg text-center font-medium ${mensaje.includes('✅') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-          {mensaje}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-4 bg-gray-50 p-6 rounded-lg shadow-md">
+    <div className="min-h-screen bg-gradient-to-br from-black via-zinc-900 to-red-950 py-20 px-4">
+      <div className="max-w-2xl mx-auto">
         
-        {/* Campo: Actividad */}
-        <div>
-          <label className="block text-sm font-medium mb-1">Actividad *</label>
-          <select 
-            name="servicio_id" 
-            value={formData.servicio_id} 
-            onChange={handleChange} 
-            className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-red-500"
-            required
+        {/* Título principal */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl md:text-5xl font-black mb-4">
+            <span className="text-red-500">RESERVA</span>
+            <span className="text-white"> TU LUGAR</span>
+          </h1>
+          <p className="text-zinc-400 text-lg">
+            Completa el formulario y asegura tu experiencia
+          </p>
+        </div>
+
+        {/* Mensaje de éxito/error */}
+        {mensaje && (
+          <div className={`p-4 mb-6 rounded-lg text-center font-medium border-2 ${
+            mensaje.includes('✅') 
+              ? 'bg-green-900/30 border-green-500 text-green-400' 
+              : 'bg-red-900/30 border-red-500 text-red-400'
+          }`}>
+            {mensaje}
+          </div>
+        )}
+
+        {/* Formulario */}
+        <form onSubmit={handleSubmit} className="bg-zinc-900/80 backdrop-blur-md border border-zinc-800 rounded-2xl p-8 shadow-2xl">
+          
+          {/* Actividad */}
+          <div className="mb-6">
+            <label className="block text-white text-sm font-bold mb-2">
+              Actividad <span className="text-red-500">*</span>
+            </label>
+            <select 
+              name="servicio_id" 
+              value={formData.servicio_id} 
+              onChange={handleChange} 
+              className="w-full bg-zinc-800 border-2 border-zinc-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all"
+              required
+            >
+              <option value="">Selecciona una actividad</option>
+              {servicios.map((servicio) => (
+                <option key={servicio.id} value={servicio.id}>
+                  {servicio.nombre} - {servicio.descripcion}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Fecha y Hora */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <label className="block text-white text-sm font-bold mb-2">
+                Fecha <span className="text-red-500">*</span>
+              </label>
+              <input 
+                type="date" 
+                name="fecha" 
+                value={formData.fecha} 
+                onChange={handleChange} 
+                className="w-full bg-zinc-800 border-2 border-zinc-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all"
+                required 
+              />
+            </div>
+            <div>
+              <label className="block text-white text-sm font-bold mb-2">
+                Hora <span className="text-red-500">*</span>
+              </label>
+              <input 
+                type="time" 
+                name="hora" 
+                value={formData.hora} 
+                onChange={handleChange} 
+                className="w-full bg-zinc-800 border-2 border-zinc-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all"
+                required 
+              />
+            </div>
+          </div>
+
+          {/* Número de personas */}
+          <div className="mb-6">
+            <label className="block text-white text-sm font-bold mb-2">
+              Número de personas <span className="text-red-500">*</span>
+            </label>
+            <input 
+              type="number" 
+              name="numero_personas" 
+              min="1" 
+              value={formData.numero_personas} 
+              onChange={handleChange} 
+              className="w-full bg-zinc-800 border-2 border-zinc-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all"
+              required 
+            />
+          </div>
+
+          {/* Nombre completo */}
+          <div className="mb-6">
+            <label className="block text-white text-sm font-bold mb-2">
+              Nombre completo <span className="text-red-500">*</span>
+            </label>
+            <input 
+              type="text" 
+              name="nombre_cliente" 
+              value={formData.nombre_cliente} 
+              onChange={handleChange} 
+              className="w-full bg-zinc-800 border-2 border-zinc-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all"
+              placeholder="Ej: Juan Pérez"
+              required 
+            />
+          </div>
+
+          {/* Teléfono */}
+          <div className="mb-6">
+            <label className="block text-white text-sm font-bold mb-2">
+              Teléfono <span className="text-zinc-500">(Opcional)</span>
+            </label>
+            <input 
+              type="tel" 
+              name="telefono" 
+              value={formData.telefono} 
+              onChange={handleChange} 
+              className="w-full bg-zinc-800 border-2 border-zinc-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all"
+              placeholder="Ej: 55 1234 5678"
+            />
+          </div>
+
+          {/* Botón de enviar */}
+          <button 
+            type="submit" 
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-4 rounded-lg transition-all transform hover:scale-[1.02] disabled:from-zinc-700 disabled:to-zinc-800 disabled:cursor-not-allowed disabled:transform-none shadow-lg shadow-red-600/30"
           >
-            <option value="">Selecciona una actividad</option>
-            {/* ⚠️ NOTA: En un siguiente paso, llenaremos esto automáticamente desde la BD. 
-                Por ahora, ve a Supabase > Table Editor > servicios, copia los "id" (UUID) 
-                de cada servicio y pégalos aquí en los "value". */}
-            <option value="2ed52812-24da-4fd9-925d-6a50cfbd33c9">Kartódromo</option>
-            <option value="b24dccbe-10ae-4aac-b356-4d85513a47de">Motódromo</option>
-            <option value="b6e79d87-4a81-4aac-9c04-49b52e8e1cdc">Gotcha</option>
-          </select>
-        </div>
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                </svg>
+                Procesando...
+              </span>
+            ) : (
+              '🏁 CONFIRMAR RESERVA'
+            )}
+          </button>
 
-        {/* Campos: Fecha y Hora */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Fecha *</label>
-            <input type="date" name="fecha" value={formData.fecha} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded" required />
-          </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Hora *</label>
-            <input type="time" name="hora" value={formData.hora} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded" required />
-          </div>
-        </div>
+        </form>
 
-        {/* Campo: Personas */}
-        <div>
-          <label className="block text-sm font-medium mb-1">Número de personas *</label>
-          <input type="number" name="numero_personas" min="1" value={formData.numero_personas} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded" required />
-        </div>
-
-        {/* Campo: Nombre */}
-        <div>
-          <label className="block text-sm font-medium mb-1">Nombre completo *</label>
-          <input type="text" name="nombre_cliente" value={formData.nombre_cliente} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded" placeholder="Ej: Juan Pérez" required />
-        </div>
-
-        {/* Campo: Teléfono */}
-        <div>
-          <label className="block text-sm font-medium mb-1">Teléfono (Opcional)</label>
-          <input type="tel" name="telefono" value={formData.telefono} onChange={handleChange} className="w-full p-2 border border-gray-300 rounded" placeholder="Ej: 55 1234 5678" />
-        </div>
-
-        {/* Botón de Enviar */}
-        <button 
-          type="submit" 
-          disabled={loading}
-          className="w-full bg-red-600 text-white font-bold py-3 rounded-lg hover:bg-red-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+        <Link 
+          href="/" 
+          className="inline-flex items-center text-zinc-400 hover:text-red-500 transition-colors mb-6 group"
         >
-          {loading ? '⏳ Guardando en la base de datos...' : '🏁 Confirmar Reserva'}
-        </button>
-      </form>
+          <svg 
+            className="w-5 h-5 mr-2 transform group-hover:-translate-x-1 transition-transform" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Volver atras
+        </Link>
+
+        {/* Información adicional */}
+        <div className="mt-8 text-center text-zinc-400 text-sm">
+          <p>📍 La Sabaneta - Kartódromo, Motódromo y más</p>
+          <p className="mt-1">La adrenalina te espera ️</p>
+        </div>
+
+      </div>
     </div>
   )
 }

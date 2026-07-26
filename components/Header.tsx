@@ -1,5 +1,7 @@
 'use client'; // Esto le dice a Next.js que este componente es interactivo (usa JavaScript del lado del cliente)
 
+import Link from 'next/link'; // Importamos Link para navegación interna
+
 import { useState } from 'react'; // Importamos useState para manejar el menú móvil
 
 export default function Header() {
@@ -13,11 +15,11 @@ export default function Header() {
       {/* 'fixed' lo mantiene fijo arriba aunque hagas scroll. 'top-0' lo pega al borde superior. */}
       {/* 'z-50' asegura que esté por encima de todo (z-index). */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-zinc-800">
-        
+
         {/* Contenedor interno para centrar el contenido */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 md:h-20">
-            
+
             {/* LOGO */}
             <div className="flex-shrink-0">
               <a href="/" className="text-2xl font-black tracking-tighter">
@@ -42,17 +44,17 @@ export default function Header() {
               <a href="#ubicacion" className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium">
                 Ubicación
               </a>
-              <a 
-                href="https://wa.me/5491100000000" 
+              <Link
+                href="/reservar"
                 className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-bold transition-colors"
               >
                 Reservar
-              </a>
+              </Link>
             </nav>
 
             {/* BOTÓN HAMBURGUESA - MÓVIL */}
             {/* 'md:hidden' significa: visible solo en móvil, oculto en pantallas medianas+ */}
-            <button 
+            <button
               onClick={() => setMenuOpen(!menuOpen)} // Al hacer clic, cambia menuOpen de true a false (y viceversa)
               className="md:hidden text-white p-2"
             >
@@ -70,36 +72,36 @@ export default function Header() {
       {menuOpen && (
         <div className="md:hidden fixed top-16 left-0 right-0 bg-black/95 backdrop-blur-md border-b border-zinc-800 z-40">
           <nav className="flex flex-col px-4 py-4 space-y-3">
-            <a 
-              href="#inicio" 
+            <a
+              href="#inicio"
               className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium py-2"
               onClick={() => setMenuOpen(false)} // Cierra el menú al hacer clic
             >
               Inicio
             </a>
-            <a 
-              href="#servicios" 
+            <a
+              href="#servicios"
               className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium py-2"
               onClick={() => setMenuOpen(false)}
             >
               Servicios
             </a>
-            <a 
-              href="#restaurante" 
+            <a
+              href="#restaurante"
               className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium py-2"
               onClick={() => setMenuOpen(false)}
             >
               Restaurante
             </a>
-            <a 
-              href="#ubicacion" 
+            <a
+              href="#ubicacion"
               className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium py-2"
               onClick={() => setMenuOpen(false)}
             >
               Ubicación
             </a>
-            <a 
-              href="https://wa.me/5491100000000" 
+            <a
+              href="https://wa.me/5491100000000"
               className="bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-bold text-center transition-colors"
               onClick={() => setMenuOpen(false)}
             >

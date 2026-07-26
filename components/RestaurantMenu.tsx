@@ -26,8 +26,8 @@ export default function RestaurantMenu() {
       platos: [
         { nombre: "Cerveza 355 ml.", desc: "Corona, Victoria, Indio, Tecate, Modelo.", precio: "$50.00" },
         { nombre: "Cerveza 1.2 L.", desc: "Corona, Victoria, Indio, Tecate, Modelo.", precio: "$120.00" },
-        { nombre: "Refrescos", desc: "Coca-Cola, Sprite, Agua mineral.", precio: "$1.500" },
-        { nombre: "Mojito de la Casa", desc: "Ron, hierbabuena, lima y soda.", precio: "$4.800" },
+        { nombre: "Refrescos", desc: "Coca-Cola, Sprite, Agua mineral.", precio: "$30.00" },
+        { nombre: "Mojito", desc: "Ron, hierbabuena, lima y soda.", precio: "$60.00" },
       ]
     }
   ];
