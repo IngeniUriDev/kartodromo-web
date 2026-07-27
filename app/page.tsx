@@ -27,7 +27,7 @@ export default function Home() {
           Go-karts, Motódromo, Gotcha y restaurante. La adrenalina te espera.
         </p>
         <a
-          href="https://wa.me/5574510454?text=Hola!%20Quiero%20reservar%20un%20turno"
+          href="https://wa.me/5491100000000?text=Hola!%20Quiero%20reservar%20un%20turno"
           target="_blank"
           rel="noopener noreferrer"
           className="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-full shadow-lg shadow-green-500/50 transition-all hover:scale-105 flex items-center gap-3"
