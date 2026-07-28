@@ -13,7 +13,7 @@ export default function Services() {
     {
       id: 2,
       titulo: "Motódromo",
-      descripcion: "Pista de tierra para motos de enduro y cross. Adrenalina pura sobre dos ruedas.",
+      descripcion: "Acceso a motos de pista para practica de carreas. Ideal para los amantes de la velocidad y la adrenalina.",
       icono: <Motorbike />,
       color: "from-yellow-500 to-orange-700", // Degradado amarillo/naranja
     },
