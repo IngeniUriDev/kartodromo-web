@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+import ReservasSkeleton from '../../components/ReservasSkeleton'
 
 export default function AdminPage() {
   const [user, setUser] = useState<any>(null)
@@ -211,7 +212,7 @@ export default function AdminPage() {
         </div>
 
         {cargandoReservas ? (
-          <div className="text-center py-20 text-zinc-500 bg-zinc-900 rounded-xl"><div className="animate-spin text-4xl mb-4">⏳</div>Cargando reservas...</div>
+          <ReservasSkeleton />
         ) : reservas.length === 0 ? (
           <div className="text-center py-20 text-zinc-500 bg-zinc-900 rounded-xl">📭 No hay reservas {filtroFecha ? `para la fecha ${filtroFecha}` : 'registradas aún'}.</div>
         ) : (
