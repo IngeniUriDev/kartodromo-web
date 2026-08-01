@@ -3,11 +3,10 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import Link from 'next/link'
+import toast from 'react-hot-toast'
 
 export default function ReservarPage() {
   const [loading, setLoading] = useState(false)
-  const [mensaje, setMensaje] = useState('')
-  const [tipoMensaje, setTipoMensaje] = useState<'exito' | 'error' | 'info'>('info')
   const [servicios, setServicios] = useState<any[]>([])
   
   // GLOSARIO: Nuevo estado para mostrar disponibilidad en tiempo real
@@ -95,33 +94,33 @@ export default function ReservarPage() {
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const value = e.target.name === 'numero_personas' ? Number(e.target.value) : e.target.value
+
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: value
     })
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    setMensaje('')
+    toast.dismiss()
 
     // Validación de campos obligatorios
     if (!formData.servicio_id || !formData.fecha || !formData.hora || !formData.nombre_cliente) {
-      setMensaje('⚠️ Por favor completa todos los campos obligatorios.')
-      setTipoMensaje('error')
+      toast.error('Por favor completa todos los campos obligatorios.', { icon: '⚠️' })
       setLoading(false)
       return
     }
 
     //Validación de cupos ANTES de guardar
     if (disponibilidad && formData.numero_personas > disponibilidad.disponibles) {
-      setMensaje(
-        ` No hay suficientes lugares disponibles. ` +
-        `Solo quedan ${disponibilidad.disponibles} lugar(es) para ese horario.`
+      toast.error(
+        `Solo quedan ${disponibilidad.disponibles} lugares disponibles para este horario. Ajusta el número de personas o elige otro horario.`,
+        { icon: '⚠️' }
       )
-      setTipoMensaje('error')
-      setLoading(false)
+      setLoading(false)   
       return
     }
 
@@ -142,11 +141,9 @@ export default function ReservarPage() {
 
     if (error) {
       console.error('Error al reservar:', error)
-      setMensaje('❌ Hubo un error al guardar la reserva. Revisa la consola.')
-      setTipoMensaje('error')
+      toast.error('Hubo un error al guardar la reservacion, intenta otra vez.')
     } else {
-      setMensaje('✅ ¡Reserva creada con éxito! Nos vemos en la pista.')
-      setTipoMensaje('exito')
+      toast.success('¡Reserva creada con éxito! Nos vemos en la pista.')
       // Limpiar el formulario
       setFormData({ servicio_id: '', fecha: '', hora: '', numero_personas: 1, nombre_cliente: '', telefono: '' })
       setDisponibilidad(null)
@@ -185,17 +182,6 @@ export default function ReservarPage() {
             Completa el formulario y asegura tu experiencia
           </p>
         </div>
-
-        {/* Mensaje de éxito/error/info */}
-        {mensaje && (
-          <div className={`p-4 mb-6 rounded-lg text-center font-medium border-2 ${
-            tipoMensaje === 'exito' ? 'bg-green-900/30 border-green-500 text-green-400' : 
-            tipoMensaje === 'error' ? 'bg-red-900/30 border-red-500 text-red-400' :
-            'bg-blue-900/30 border-blue-500 text-blue-400'
-          }`}>
-            {mensaje}
-          </div>
-        )}
 
         {/* Panel de disponibilidad en tiempo real */}
         {disponibilidad && (
