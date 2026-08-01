@@ -5,6 +5,27 @@ import { supabase } from '../../lib/supabaseClient'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 import FormularioSkeleton from '../../components/FormularioSkeleton'
+import {motion} from 'framer-motion'
+
+// Variantes de animación
+// configuraciones reutilizables para que el código no se ensucie
+const containerVariants = {
+  hidden: { opacity: 0, y: 30 }, // Empieza invisible y 30px más abajo
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { 
+      duration: 0.6, 
+      ease: "easeOut",
+      staggerChildren: 0.1 // 📚 GLOSARIO: Hace que los hijos aparezcan uno tras otro con 0.1s de diferencia
+    } 
+  }
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+}
 
 export default function ReservarPage() {
   const [cargandoServicios, setCargandoServicios] = useState<boolean>(true)
@@ -22,7 +43,7 @@ export default function ReservarPage() {
     servicio_id: '',
     fecha: '',
     hora: '',
-    numero_personas: 0,
+    numero_personas: 1,
     nombre_cliente: '',
     telefono: ''
   })
@@ -160,28 +181,39 @@ export default function ReservarPage() {
     setLoading(false)
   }
 
+  
+  console.log('DEBUG - cargandoServicios:', cargandoServicios)
+  console.log('DEBUG - servicios:', servicios)
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-zinc-900 to-red-950 py-20 px-4">
+    <motion.div 
+      className="min-h-screen bg-gradient-to-br from-black via-zinc-900 to-red-950 py-20 px-4"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
       <div className="max-w-2xl mx-auto">
         
-        {/* Botón para volver al inicio */}
-        <Link 
-          href="/" 
-          className="inline-flex items-center text-zinc-400 hover:text-red-500 transition-colors mb-6 group"
-        >
-          <svg 
-            className="w-5 h-5 mr-2 transform group-hover:-translate-x-1 transition-transform" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
+        {/* Botón para volver al inicio (ahora animado) */}
+        <motion.div variants={itemVariants}>
+          <Link 
+            href="/" 
+            className="inline-flex items-center text-zinc-400 hover:text-red-500 transition-colors mb-6 group"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-          Volver al Inicio
-        </Link>
+            <svg 
+              className="w-5 h-5 mr-2 transform group-hover:-translate-x-1 transition-transform" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Volver al Inicio
+          </Link>
+        </motion.div>
 
-        {/* Título principal */}
-        <div className="text-center mb-8">
+        {/* Título principal (animado) */}
+        <motion.div className="text-center mb-8" variants={itemVariants}>
           <h1 className="text-4xl md:text-5xl font-black mb-4">
             <span className="text-red-500">RESERVA</span>
             <span className="text-white"> TU LUGAR</span>
@@ -189,188 +221,162 @@ export default function ReservarPage() {
           <p className="text-zinc-400 text-lg">
             Completa el formulario y asegura tu experiencia
           </p>
-        </div>
+        </motion.div>
 
-        {/* Panel de disponibilidad en tiempo real */}
+        {/* Panel de disponibilidad (animado) */}
         {disponibilidad && (
-          <div className={`p-4 mb-6 rounded-lg border-2 ${
-            disponibilidad.disponibles === 0 
-              ? 'bg-red-900/30 border-red-500' 
-              : disponibilidad.disponibles <= 3 
-                ? 'bg-yellow-900/30 border-yellow-500'
-                : 'bg-green-900/30 border-green-500'
-          }`}>
-            <div className="flex justify-between items-center mb-2">
-              <span className="font-bold text-white">📊 Disponibilidad del horario:</span>
-              <span className={`text-sm font-bold ${
-                disponibilidad.disponibles === 0 ? 'text-red-400' : 'text-white'
-              }`}>
-                {disponibilidad.disponibles === 0 ? '🚫 AGOTADO' : 
-                 disponibilidad.disponibles <= 3 ? '⚠️ ¡Últimos lugares!' : '✅ Disponible'}
-              </span>
-            </div>
-            
-            {/* Barra de progreso visual */}
-            <div className="w-full bg-zinc-800 rounded-full h-3 mb-2">
-              <div 
-                className={`h-3 rounded-full transition-all duration-500 ${
-                  disponibilidad.disponibles === 0 ? 'bg-red-500' : 
-                  disponibilidad.disponibles <= 3 ? 'bg-yellow-500' : 'bg-green-500'
-                }`}
-                style={{ width: `${(disponibilidad.ocupados / disponibilidad.capacidad) * 100}%` }}
-              ></div>
-            </div>
-            
-            <div className="flex justify-between text-sm text-zinc-400">
-              <span>{disponibilidad.ocupados} ocupados</span>
-              <span>{disponibilidad.disponibles} disponibles</span>
-              <span>Capacidad: {disponibilidad.capacidad}</span>
-            </div>
-          </div>
+          <motion.div 
+            className={`p-4 mb-6 rounded-lg border-2 ${
+              disponibilidad.disponibles === 0 
+                ? 'bg-red-900/30 border-red-500' 
+                : disponibilidad.disponibles <= 3 
+                  ? 'bg-yellow-900/30 border-yellow-500'
+                  : 'bg-green-900/30 border-green-500'
+            }`}
+            variants={itemVariants}
+          >
+            {/* ... contenido del panel de disponibilidad ... */}
+          </motion.div>
         )}
 
-                {/* 📚 GLOSARIO: Renderizado condicional para el Skeleton */}
-        {/* Si está cargando, muestra el esqueleto. Si no, muestra el formulario real. */}
-        {cargandoServicios ? (
-          <FormularioSkeleton />
-        ) : (
-          <form onSubmit={handleSubmit} className="bg-zinc-900/80 backdrop-blur-md border border-zinc-800 rounded-2xl p-8 shadow-2xl">
-            
-            {/* Actividad */}
-            <div className="mb-6">
-              <label className="block text-white text-sm font-bold mb-2">
-                Actividad <span className="text-red-500">*</span>
-              </label>
-              <select 
-                name="servicio_id" 
-                value={formData.servicio_id} 
-                onChange={handleChange} 
-                className="w-full bg-zinc-800 border-2 border-zinc-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all"
-                required
+        {/* Formulario o Skeleton (animado) */}
+                {/* Formulario o Skeleton (animado) */}
+        <motion.div variants={itemVariants}>
+          {cargandoServicios ? (
+            <FormularioSkeleton />
+          ) : (
+            <form onSubmit={handleSubmit} className="bg-zinc-900/80 backdrop-blur-md border border-zinc-800 rounded-2xl p-8 shadow-2xl">
+              
+              {/* Actividad */}
+              <div className="mb-6">
+                <label className="block text-white text-sm font-bold mb-2">
+                  Actividad <span className="text-red-500">*</span>
+                </label>
+                <select 
+                  name="servicio_id" 
+                  value={formData.servicio_id} 
+                  onChange={handleChange} 
+                  className="w-full bg-zinc-800 border-2 border-zinc-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all"
+                  required
+                >
+                  <option value="">Selecciona una actividad</option>
+                  {servicios.map((servicio) => (
+                    <option key={servicio.id} value={servicio.id}>
+                      {servicio.nombre} - {servicio.descripcion} (Cap: {servicio.capacidad_maxima})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Fecha y Hora */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label className="block text-white text-sm font-bold mb-2">
+                    Fecha <span className="text-red-500">*</span>
+                  </label>
+                  <input 
+                    type="date" 
+                    name="fecha" 
+                    value={formData.fecha} 
+                    onChange={handleChange} 
+                    className="w-full bg-zinc-800 border-2 border-zinc-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all"
+                    required 
+                  />
+                </div>
+                <div>
+                  <label className="block text-white text-sm font-bold mb-2">
+                    Hora <span className="text-red-500">*</span>
+                  </label>
+                  <input 
+                    type="time" 
+                    name="hora" 
+                    value={formData.hora} 
+                    onChange={handleChange} 
+                    className="w-full bg-zinc-800 border-2 border-zinc-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all"
+                    required 
+                  />
+                </div>
+              </div>
+
+              {/* Número de personas */}
+              <div className="mb-6">
+                <label className="block text-white text-sm font-bold mb-2">
+                  Número de personas <span className="text-red-500">*</span>
+                </label>
+                <input 
+                  type="number" 
+                  name="numero_personas" 
+                  min="1" 
+                  max={disponibilidad?.disponibles || 100}
+                  value={formData.numero_personas} 
+                  onChange={handleChange} 
+                  className="w-full bg-zinc-800 border-2 border-zinc-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all"
+                  required 
+                />
+                {disponibilidad && (
+                  <p className="text-zinc-400 text-xs mt-1">
+                    Máximo disponible: {disponibilidad.disponibles} personas
+                  </p>
+                )}
+              </div>
+
+              {/* Nombre completo */}
+              <div className="mb-6">
+                <label className="block text-white text-sm font-bold mb-2">
+                  Nombre completo <span className="text-red-500">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  name="nombre_cliente" 
+                  value={formData.nombre_cliente} 
+                  onChange={handleChange} 
+                  className="w-full bg-zinc-800 border-2 border-zinc-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all"
+                  placeholder="Ej: Juan Pérez"
+                  required 
+                />
+              </div>
+
+              {/* Teléfono */}
+              <div className="mb-6">
+                <label className="block text-white text-sm font-bold mb-2">
+                  Teléfono <span className="text-zinc-500">(Opcional)</span>
+                </label>
+                <input 
+                  type="tel" 
+                  name="telefono" 
+                  value={formData.telefono} 
+                  onChange={handleChange} 
+                  className="w-full bg-zinc-800 border-2 border-zinc-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all"
+                  placeholder="Ej: 55 1234 5678"
+                />
+              </div>
+
+              {/* Botón de enviar */}
+              <button 
+                type="submit" 
+                disabled={loading || (disponibilidad?.disponibles === 0)}
+                className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 disabled:from-zinc-700 disabled:to-zinc-800 disabled:cursor-not-allowed text-white font-bold py-4 rounded-lg transition-all transform hover:scale-[1.02] disabled:transform-none shadow-lg shadow-red-600/30"
               >
-                <option value="">Selecciona una actividad</option>
-                {servicios.map((servicio) => (
-                  <option key={servicio.id} value={servicio.id}>
-                    {servicio.nombre} - {servicio.descripcion} (Cap: {servicio.capacidad_maxima})
-                  </option>
-                ))}
-              </select>
-            </div>
+                {loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                    </svg>
+                    Procesando...
+                  </span>
+                ) : disponibilidad?.disponibles === 0 ? (
+                  '🚫 Horario Agotado'
+                ) : (
+                  '🏁 CONFIRMAR RESERVA'
+                )}
+              </button>
 
-            {/* Fecha y Hora */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div>
-                <label className="block text-white text-sm font-bold mb-2">
-                  Fecha <span className="text-red-500">*</span>
-                </label>
-                <input 
-                  type="date" 
-                  name="fecha" 
-                  value={formData.fecha} 
-                  onChange={handleChange} 
-                  className="w-full bg-zinc-800 border-2 border-zinc-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all"
-                  required 
-                />
-              </div>
-              <div>
-                <label className="block text-white text-sm font-bold mb-2">
-                  Hora <span className="text-red-500">*</span>
-                </label>
-                <input 
-                  type="time" 
-                  name="hora" 
-                  value={formData.hora} 
-                  onChange={handleChange} 
-                  className="w-full bg-zinc-800 border-2 border-zinc-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all"
-                  required 
-                />
-              </div>
-            </div>
-
-            {/* Número de personas */}
-            <div className="mb-6">
-              <label className="block text-white text-sm font-bold mb-2">
-                Número de personas <span className="text-red-500">*</span>
-              </label>
-              <input 
-                type="number" 
-                name="numero_personas" 
-                min="1" 
-                max={disponibilidad?.disponibles || 100}
-                value={formData.numero_personas} 
-                onChange={handleChange} 
-                className="w-full bg-zinc-800 border-2 border-zinc-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all"
-                required 
-              />
-              {disponibilidad && (
-                <p className="text-zinc-400 text-xs mt-1">
-                  Máximo disponible: {disponibilidad.disponibles} personas
-                </p>
-              )}
-            </div>
-
-            {/* Nombre completo */}
-            <div className="mb-6">
-              <label className="block text-white text-sm font-bold mb-2">
-                Nombre completo <span className="text-red-500">*</span>
-              </label>
-              <input 
-                type="text" 
-                name="nombre_cliente" 
-                value={formData.nombre_cliente} 
-                onChange={handleChange} 
-                className="w-full bg-zinc-800 border-2 border-zinc-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all"
-                placeholder="Ej: Juan Pérez"
-                required 
-              />
-            </div>
-
-            {/* Teléfono */}
-            <div className="mb-6">
-              <label className="block text-white text-sm font-bold mb-2">
-                Teléfono <span className="text-zinc-500">(Opcional)</span>
-              </label>
-              <input 
-                type="tel" 
-                name="telefono" 
-                value={formData.telefono} 
-                onChange={handleChange} 
-                className="w-full bg-zinc-800 border-2 border-zinc-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 transition-all"
-                placeholder="Ej: 55 1234 5678"
-              />
-            </div>
-
-            {/* Botón de enviar */}
-            <button 
-              type="submit" 
-              disabled={loading || (disponibilidad?.disponibles === 0)}
-              className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 disabled:from-zinc-700 disabled:to-zinc-800 disabled:cursor-not-allowed text-white font-bold py-4 rounded-lg transition-all transform hover:scale-[1.02] disabled:transform-none shadow-lg shadow-red-600/30"
-            >
-              {loading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
-                  </svg>
-                  Procesando...
-                </span>
-              ) : disponibilidad?.disponibles === 0 ? (
-                '🚫 Horario Agotado'
-              ) : (
-                '🏁 CONFIRMAR RESERVA'
-              )}
-            </button>
-
-          </form>
-        )}
-
-        {/* Información adicional */}
-        <div className="mt-8 text-center text-zinc-400 text-sm">
-          <p>📍 Sabaneta - Kartódromo, Motódromo y más</p>
-          <p className="mt-1">La adrenalina te espera 🏎️</p>
-        </div>
+            </form>
+          )}
+        </motion.div>
 
       </div>
-    </div>
+    </motion.div>
   )
 }
