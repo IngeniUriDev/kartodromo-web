@@ -99,7 +99,7 @@ export default function ReservarPage() {
         .eq('servicio_id', formData.servicio_id)
         .eq('fecha', formData.fecha)
         .eq('hora', formData.hora)
-        .neq('estado', 'cancelada') // 📚 GLOSARIO: .neq = "not equal" (no igual a)
+        .neq('estado', 'cancelada') // .neq = "not equal" (no igual a)
 
       if (error) {
         console.error('Error al verificar disponibilidad:', error)
