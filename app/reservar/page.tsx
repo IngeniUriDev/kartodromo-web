@@ -7,7 +7,6 @@ import toast from 'react-hot-toast'
 import FormularioSkeleton from '../../components/FormularioSkeleton'
 import {motion} from 'framer-motion'
 
-// Variantes de animación
 // configuraciones reutilizables para que el código no se ensucie
 const containerVariants = {
   hidden: { opacity: 0, y: 30 }, // Empieza invisible y 30px más abajo
@@ -17,7 +16,7 @@ const containerVariants = {
     transition: { 
       duration: 0.6, 
       ease: "easeOut",
-      staggerChildren: 0.1 // 📚 GLOSARIO: Hace que los hijos aparezcan uno tras otro con 0.1s de diferencia
+      staggerChildren: 0.1 //  Hace que los hijos aparezcan uno tras otro con 0.1s de diferencia
     } 
   }
 }

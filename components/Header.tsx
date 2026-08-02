@@ -32,16 +32,16 @@ export default function Header() {
             {/* MENÚ DE NAVEGACIÓN - ESCRITORIO */}
             {/* 'hidden md:flex' significa: oculto en móvil, visible como flex en pantallas medianas+ */}
             <nav className="hidden md:flex items-center space-x-8">
-              <a href="#inicio" className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium">
+              <a href="/#inicio" className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium">
                 Inicio
               </a>
-              <a href="#servicios" className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium">
+              <a href="/#servicios" className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium">
                 Servicios
               </a>
-              <a href="#restaurante" className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium">
+              <a href="/#restaurante" className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium">
                 Restaurante
               </a>
-              <a href="#ubicacion" className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium">
+              <a href="/#ubicacion" className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium">
                 Ubicación
               </a>
               <Link
@@ -73,40 +73,40 @@ export default function Header() {
         <div className="md:hidden fixed top-16 left-0 right-0 bg-black/95 backdrop-blur-md border-b border-zinc-800 z-40">
           <nav className="flex flex-col px-4 py-4 space-y-3">
             <a
-              href="#inicio"
+              href="/#inicio"
               className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium py-2"
-              onClick={() => setMenuOpen(false)} // Cierra el menú al hacer clic
+              onClick={() => setMenuOpen(false)}
             >
               Inicio
             </a>
             <a
-              href="#servicios"
+              href="/#servicios"
               className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium py-2"
               onClick={() => setMenuOpen(false)}
             >
               Servicios
             </a>
             <a
-              href="#restaurante"
+              href="/#restaurante"
               className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium py-2"
               onClick={() => setMenuOpen(false)}
             >
               Restaurante
             </a>
             <a
-              href="#ubicacion"
+              href="/#ubicacion"
               className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium py-2"
               onClick={() => setMenuOpen(false)}
             >
               Ubicación
             </a>
-            <a
+            <Link
               href="/reservar"
               className="bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-bold text-center transition-colors"
               onClick={() => setMenuOpen(false)}
             >
               Reservar
-            </a>
+            </Link>
           </nav>
         </div>
       )}
