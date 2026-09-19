@@ -21,7 +21,7 @@ export default function Location() {
               </div>
               <div>
                 <h3 className="text-xl font-bold mb-1">Dirección</h3>
-                <p className="text-zinc-400">Av. Principal de la Sabaneta, Km 5.<br />Tu Ciudad, Tu País.</p>
+                <p className="text-zinc-400">Av. Principal de la Sabaneta, Km 5.<br />La marquesa, Estado de México.</p>
               </div>
             </div>
 
