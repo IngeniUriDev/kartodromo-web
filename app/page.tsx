@@ -74,7 +74,7 @@ export default function Home() {
             <div className="flex flex-col items-center p-3 rounded-2xl bg-zinc-950/60 border border-zinc-900">
               <div className="flex items-center gap-2 text-red-500 mb-1">
                 <Gauge className="w-5 h-5" />
-                <span className="text-2xl sm:text-3xl font-black text-white">850m</span>
+                <span className="text-2xl sm:text-3xl font-black text-white">1230m</span>
               </div>
               <span className="text-xs text-zinc-400 font-medium">Longitud de Pista</span>
             </div>

@@ -58,9 +58,8 @@ export default function FaqSection() {
                 >
                   <span>{faq.q}</span>
                   <ChevronDown
-                    className={`w-5 h-5 flex-shrink-0 text-red-500 transition-transform duration-300 ${
-                      isOpen ? 'transform rotate-180' : ''
-                    }`}
+                    className={`w-5 h-5 flex-shrink-0 text-red-500 transition-transform duration-300 ${isOpen ? 'transform rotate-180' : ''
+                      }`}
                   />
                 </button>
                 {isOpen && (
@@ -83,7 +82,7 @@ export default function FaqSection() {
               <Award className="w-4 h-4 text-amber-400" /> Compromiso de Seguridad Máxima
             </h4>
             <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-              Todos los karts cuentan con bumpers perimetrales de absorción de impactos, cinturones de 4 puntos y sistema de corte de ignición a control remoto para incidentes en pista.
+              Todos los karts cuentan con bumpers perimetrales de absorción de impactos, cinturones de 4 puntos.
             </p>
           </div>
         </div>

@@ -1,7 +1,6 @@
--- ==============================================================================
--- 🛡️ POLÍTICAS DE SEGURIDAD ROW LEVEL SECURITY (RLS) PARA SUPABASE
+
+-- POLÍTICAS DE SEGURIDAD ROW LEVEL SECURITY (RLS) PARA SUPABASE
 -- Kartódromo & Motódromo La Sabaneta
--- ==============================================================================
 -- Ejecuta este script en el SQL Editor de tu Dashboard de Supabase.
 -- Protege tu base de datos contra accesos no autorizados y manipulación externa.
 
@@ -10,9 +9,7 @@ ALTER TABLE IF EXISTS servicios ENABLE ROW LEVEL SECURITY;
 ALTER TABLE IF EXISTS reservas ENABLE ROW LEVEL SECURITY;
 ALTER TABLE IF EXISTS perfiles ENABLE ROW LEVEL SECURITY;
 
--- ==============================================================================
--- 📋 TABLA: SERVICIOS
--- ==============================================================================
+-- TABLA: SERVICIOS
 -- Cualquier visitante público (anónimo o logueado) puede leer las actividades activas
 DROP POLICY IF EXISTS "Lectura pública de servicios activos" ON servicios;
 CREATE POLICY "Lectura pública de servicios activos"
@@ -32,9 +29,7 @@ USING (
   )
 );
 
--- ==============================================================================
--- 📅 TABLA: RESERVAS
--- ==============================================================================
+-- TABLA: RESERVAS
 -- Los usuarios públicos pueden crear reservas (o compras)
 DROP POLICY IF EXISTS "Permitir crear reservas públicas" ON reservas;
 CREATE POLICY "Permitir crear reservas públicas"
@@ -83,9 +78,8 @@ USING (
   )
 );
 
--- ==============================================================================
--- 👤 TABLA: PERFILES
--- ==============================================================================
+
+-- TABLA: PERFILES
 -- Cada usuario autenticado puede leer su propio perfil para verificar su rol
 DROP POLICY IF EXISTS "Usuarios leen su propio perfil" ON perfiles;
 CREATE POLICY "Usuarios leen su propio perfil"
