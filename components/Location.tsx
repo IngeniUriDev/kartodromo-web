@@ -42,7 +42,7 @@ export default function Location() {
               <div>
                 <h3 className="text-lg font-bold text-white mb-1">Horarios de Operación</h3>
                 <p className="text-zinc-300 text-sm leading-relaxed">
-                  <strong className="text-white">Viernes a Domingo y Días Festivos:</strong> 10:00 AM – 8:00 PM<br />
+                  <strong className="text-white">Viernes a Domingo y Días Festivos:</strong> 10:00 AM – 7:00 PM<br />
                   <strong className="text-white">Martes a Jueves:</strong> Solo grupos privados y eventos con reserva previa.
                 </p>
               </div>

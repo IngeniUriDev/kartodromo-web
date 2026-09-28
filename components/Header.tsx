@@ -16,7 +16,7 @@ export default function Header() {
             <div className="flex items-center gap-3">
               <Link href="/" className="flex items-center gap-2 group">
                 <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-red-600 to-red-800 text-white font-black text-xl shadow-lg shadow-red-600/30 group-hover:scale-105 transition-transform">
-                  S
+                  KS
                 </span>
                 <div className="flex flex-col">
                   <span className="text-xl font-black tracking-tight text-white leading-none">
@@ -39,9 +39,6 @@ export default function Header() {
               </Link>
               <Link href="/#paquetes" className="text-zinc-300 hover:text-white transition-colors font-medium text-sm">
                 Pases y Precios
-              </Link>
-              <Link href="/#restaurante" className="text-zinc-300 hover:text-white transition-colors font-medium text-sm">
-                Restaurante
               </Link>
               <Link href="/#galeria" className="text-zinc-300 hover:text-white transition-colors font-medium text-sm">
                 Galería
