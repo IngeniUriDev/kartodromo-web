@@ -1,112 +1,144 @@
-'use client'; // Esto le dice a Next.js que este componente es interactivo (usa JavaScript del lado del cliente)
+'use client';
 
-import Link from 'next/link'; // Importamos Link para navegación interna
-
-import { useState } from 'react'; // Importamos useState para manejar el menú móvil
+import Link from 'next/link';
+import { useState } from 'react';
+import { ShoppingBag, Calendar, Menu, X } from 'lucide-react';
 
 export default function Header() {
-  // useState crea una variable de estado 'menuOpen' y una función 'setMenuOpen' para cambiarla
-  // menuOpen empieza en false (menú cerrado)
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <>
-      {/* HEADER PRINCIPAL */}
-      {/* 'fixed' lo mantiene fijo arriba aunque hagas scroll. 'top-0' lo pega al borde superior. */}
-      {/* 'z-50' asegura que esté por encima de todo (z-index). */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-zinc-800">
-
-        {/* Contenedor interno para centrar el contenido */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-black/85 backdrop-blur-md border-b border-zinc-800/80 transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 md:h-20">
-
+          <div className="flex items-center justify-between h-20">
             {/* LOGO */}
-            <div className="flex-shrink-0">
-              <a href="/" className="text-2xl font-black tracking-tighter">
-                <span className="text-red-500">SABA</span>
-
-                <span className="text-white">NETA</span>
-              </a>
+            <div className="flex items-center gap-3">
+              <Link href="/" className="flex items-center gap-2 group">
+                <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-red-600 to-red-800 text-white font-black text-xl shadow-lg shadow-red-600/30 group-hover:scale-105 transition-transform">
+                  S
+                </span>
+                <div className="flex flex-col">
+                  <span className="text-xl font-black tracking-tight text-white leading-none">
+                    KARTÓDROMO <span className="text-red-500">SABANETA</span>
+                  </span>
+                  <span className="text-[10px] font-semibold tracking-widest text-zinc-400 uppercase">
+                    Racing & Entertainment
+                  </span>
+                </div>
+              </Link>
             </div>
 
-            {/* MENÚ DE NAVEGACIÓN - ESCRITORIO */}
-            {/* 'hidden md:flex' significa: oculto en móvil, visible como flex en pantallas medianas+ */}
-            <nav className="hidden md:flex items-center space-x-8">
-              <a href="/#inicio" className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium">
+            {/* MENÚ DE ESCRITORIO */}
+            <nav className="hidden lg:flex items-center space-x-7">
+              <Link href="/#inicio" className="text-zinc-300 hover:text-white transition-colors font-medium text-sm">
                 Inicio
-              </a>
-              <a href="/#servicios" className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium">
-                Servicios
-              </a>
-              <a href="/#restaurante" className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium">
+              </Link>
+              <Link href="/#servicios" className="text-zinc-300 hover:text-white transition-colors font-medium text-sm">
+                Atracciones
+              </Link>
+              <Link href="/#paquetes" className="text-zinc-300 hover:text-white transition-colors font-medium text-sm">
+                Pases y Precios
+              </Link>
+              <Link href="/#restaurante" className="text-zinc-300 hover:text-white transition-colors font-medium text-sm">
                 Restaurante
-              </a>
-              <a href="/#ubicacion" className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium">
+              </Link>
+              <Link href="/#galeria" className="text-zinc-300 hover:text-white transition-colors font-medium text-sm">
+                Galería
+              </Link>
+              <Link href="/#ubicacion" className="text-zinc-300 hover:text-white transition-colors font-medium text-sm">
                 Ubicación
-              </a>
-              <Link
-                href="/reservar"
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-bold transition-colors"
-              >
-                Reservar
               </Link>
             </nav>
 
+            {/* CTAs DERECHA */}
+            <div className="hidden md:flex items-center gap-3">
+              <Link
+                href="/comprar"
+                className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white px-4 py-2.5 rounded-xl font-bold text-sm transition-all shadow-lg shadow-red-600/25 flex items-center gap-2 hover:scale-[1.02]"
+              >
+                <ShoppingBag className="w-4 h-4" />
+                <span>Comprar Pases</span>
+              </Link>
+              <Link
+                href="/reservar"
+                className="bg-zinc-800/80 hover:bg-zinc-700 text-white border border-zinc-700/80 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all flex items-center gap-2"
+              >
+                <Calendar className="w-4 h-4 text-red-500" />
+                <span>Reservar Fecha</span>
+              </Link>
+            </div>
+
             {/* BOTÓN HAMBURGUESA - MÓVIL */}
-            {/* 'md:hidden' significa: visible solo en móvil, oculto en pantallas medianas+ */}
             <button
-              onClick={() => setMenuOpen(!menuOpen)} // Al hacer clic, cambia menuOpen de true a false (y viceversa)
-              className="md:hidden text-white p-2"
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="lg:hidden text-zinc-300 hover:text-white p-2 rounded-lg bg-zinc-900 border border-zinc-800"
+              aria-label="Abrir menú"
             >
-              {/* Ícono de hamburguesa (3 líneas) */}
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
+              {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
       </header>
 
       {/* MENÚ MÓVIL DESPLEGABLE */}
-      {/* Solo se muestra cuando menuOpen es true. 'md:hidden' lo oculta en escritorio. */}
       {menuOpen && (
-        <div className="md:hidden fixed top-16 left-0 right-0 bg-black/95 backdrop-blur-md border-b border-zinc-800 z-40">
-          <nav className="flex flex-col px-4 py-4 space-y-3">
-            <a
+        <div className="lg:hidden fixed top-20 left-0 right-0 bg-black/95 backdrop-blur-xl border-b border-zinc-800 z-40 px-5 py-6 shadow-2xl animate-in slide-in-from-top-4 duration-200">
+          <nav className="flex flex-col space-y-4">
+            <Link
               href="/#inicio"
-              className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium py-2"
+              className="text-zinc-300 hover:text-white py-2 font-medium"
               onClick={() => setMenuOpen(false)}
             >
               Inicio
-            </a>
-            <a
+            </Link>
+            <Link
               href="/#servicios"
-              className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium py-2"
+              className="text-zinc-300 hover:text-white py-2 font-medium"
               onClick={() => setMenuOpen(false)}
             >
-              Servicios
-            </a>
-            <a
+              Atracciones
+            </Link>
+            <Link
+              href="/#paquetes"
+              className="text-zinc-300 hover:text-white py-2 font-medium"
+              onClick={() => setMenuOpen(false)}
+            >
+              Pases y Precios
+            </Link>
+            <Link
               href="/#restaurante"
-              className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium py-2"
+              className="text-zinc-300 hover:text-white py-2 font-medium"
               onClick={() => setMenuOpen(false)}
             >
               Restaurante
-            </a>
-            <a
+            </Link>
+            <Link
               href="/#ubicacion"
-              className="text-zinc-300 hover:text-white hover:text-red-500 transition-colors font-medium py-2"
+              className="text-zinc-300 hover:text-white py-2 font-medium"
               onClick={() => setMenuOpen(false)}
             >
               Ubicación
-            </a>
-            <Link
-              href="/reservar"
-              className="bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-bold text-center transition-colors"
-              onClick={() => setMenuOpen(false)}
-            >
-              Reservar
             </Link>
+
+            <div className="pt-4 border-t border-zinc-800 flex flex-col gap-3">
+              <Link
+                href="/comprar"
+                className="bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-bold text-center flex items-center justify-center gap-2 shadow-lg shadow-red-600/30"
+                onClick={() => setMenuOpen(false)}
+              >
+                <ShoppingBag className="w-4 h-4" />
+                Comprar Pases Online
+              </Link>
+              <Link
+                href="/reservar"
+                className="bg-zinc-800 hover:bg-zinc-700 text-white py-3 rounded-xl font-bold text-center flex items-center justify-center gap-2 border border-zinc-700"
+                onClick={() => setMenuOpen(false)}
+              >
+                <Calendar className="w-4 h-4 text-red-500" />
+                Reservar Horario
+              </Link>
+            </div>
           </nav>
         </div>
       )}

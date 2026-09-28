@@ -1,9 +1,8 @@
-'use client'; // Necesitamos esto porque usaremos useState para el Lightbox
+'use client';
 
 import { useState } from 'react';
 import Image from 'next/image';
 import { X, ZoomIn } from 'lucide-react';
-import Link from 'next/link';
 
 export default function Gallery() {
   // Estado para controlar si el Lightbox (visor de imagen grande) está abierto

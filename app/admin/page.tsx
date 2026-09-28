@@ -3,9 +3,23 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import ReservasSkeleton from '../../components/ReservasSkeleton'
+import type { User } from '@supabase/supabase-js'
+
+interface ReservaAdmin {
+  id: string
+  nombre_cliente: string
+  telefono: string | null
+  fecha: string
+  hora: string
+  numero_personas: number
+  estado: string
+  servicios?: {
+    nombre: string
+  } | null
+}
 
 export default function AdminPage() {
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<User | null>(null)
   const [rol, setRol] = useState<string>('')
   const [cargandoAuth, setCargandoAuth] = useState<boolean>(true)
   
@@ -14,66 +28,10 @@ export default function AdminPage() {
   const [errorLogin, setErrorLogin] = useState<string>('')
   const [cargando, setCargando] = useState<boolean>(false)
 
-  const [reservas, setReservas] = useState<any[]>([])
-  const [cargandoReservas, setCargandoReservas] = useState<boolean>(true)
+  const [reservas, setReservas] = useState<ReservaAdmin[]>([])
+  const [cargandoReservas, setCargandoReservas] = useState<boolean>(false)
   const [procesandoId, setProcesandoId] = useState<string | null>(null)
   const [filtroFecha, setFiltroFecha] = useState<string>('')
-
-  useEffect(() => {
-    verificarSesion()
-  }, [])
-
-  const verificarSesion = async () => {
-    setCargandoAuth(true)
-    const { data: { session } } = await supabase.auth.getSession()
-    
-    if (session?.user) {
-      setUser(session.user)
-      await verificarRol(session.user.id)
-    } else {
-      setUser(null)
-      setRol('')
-      setCargandoAuth(false)
-    }
-  }
-
-  const verificarRol = async (userId: string) => {
-    const { data, error } = await supabase
-      .from('perfiles')
-      .select('rol')
-      .eq('id', userId)
-      .single()
-
-    if (data) {
-      setRol(data.rol)
-      cargarReservas()
-    } else {
-      console.error('Error al verificar rol:', error)
-      setErrorLogin('No tienes permisos asignados. Contacta al administrador.')
-      handleLogout()
-    }
-    setCargandoAuth(false)
-  }
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setErrorLogin('')
-    setCargando(true)
-
-    const { error, data } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-
-    if (error) {
-      setErrorLogin(' Email o contraseña incorrectos')
-      setCargando(false)
-    } else if (data.user) {
-      setUser(data.user)
-      await verificarRol(data.user.id)
-      setCargando(false)
-    }
-  }
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
@@ -83,10 +41,9 @@ export default function AdminPage() {
     setEmail('')
     setPassword('')
     setErrorLogin('')
-    setCargandoAuth(false)
   }
 
-  const cargarReservas = async () => {
+  const recargarReservas = async () => {
     setCargandoReservas(true)
     let query = supabase
       .from('reservas')
@@ -100,13 +57,100 @@ export default function AdminPage() {
       .order('fecha', { ascending: false })
       .order('hora', { ascending: true })
 
-    if (!error && data) setReservas(data)
+    if (!error && data) {
+      setReservas(data as unknown as ReservaAdmin[])
+    }
     setCargandoReservas(false)
   }
 
+  // Inicializar sesión una sola vez
   useEffect(() => {
-    if (user) cargarReservas()
-  }, [filtroFecha, user])
+    let activo = true
+
+    const init = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (!activo) return
+
+        if (session?.user) {
+          setUser(session.user)
+          const { data: perfil } = await supabase
+            .from('perfiles')
+            .select('rol')
+            .eq('id', session.user.id)
+            .single()
+
+          if (!activo) return
+          if (perfil) {
+            setRol(perfil.rol)
+          }
+        }
+      } catch (err) {
+        console.error('Error al verificar sesión:', err)
+      } finally {
+        if (activo) setCargandoAuth(false)
+      }
+    }
+
+    init()
+    return () => { activo = false }
+  }, [])
+
+  // Sincronizar reservas de forma asíncrona
+  useEffect(() => {
+    if (!user) return
+    let activo = true
+
+    const sincronizar = async () => {
+      let query = supabase
+        .from('reservas')
+        .select(`id, nombre_cliente, telefono, fecha, hora, numero_personas, estado, servicios (nombre)`)
+
+      if (filtroFecha) {
+        query = query.eq('fecha', filtroFecha)
+      }
+
+      const { data, error } = await query
+        .order('fecha', { ascending: false })
+        .order('hora', { ascending: true })
+
+      if (!activo) return
+      if (!error && data) {
+        setReservas(data as unknown as ReservaAdmin[])
+      }
+    }
+
+    sincronizar()
+    return () => { activo = false }
+  }, [user, filtroFecha])
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setErrorLogin('')
+    setCargando(true)
+
+    const { error, data } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+
+    if (error) {
+      setErrorLogin('Email o contraseña incorrectos')
+      setCargando(false)
+    } else if (data.user) {
+      setUser(data.user)
+      const { data: perfil } = await supabase
+        .from('perfiles')
+        .select('rol')
+        .eq('id', data.user.id)
+        .single()
+
+      if (perfil) {
+        setRol(perfil.rol)
+      }
+      setCargando(false)
+    }
+  }
 
   const cambiarEstado = async (id: string, nuevoEstado: string) => {
     if (rol !== 'admin') {
@@ -191,7 +235,7 @@ export default function AdminPage() {
           </div>
           
           <div className="flex gap-3 flex-wrap justify-center">
-            <button onClick={cargarReservas} className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-bold transition-all hover:scale-105 flex items-center gap-2 shadow-lg shadow-blue-600/30">
+            <button onClick={recargarReservas} className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-bold transition-all hover:scale-105 flex items-center gap-2 shadow-lg shadow-blue-600/30">
               🔄 Actualizar
             </button>
             <button onClick={handleLogout} className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-bold transition-all hover:scale-105 flex items-center gap-2 shadow-lg shadow-red-600/30">

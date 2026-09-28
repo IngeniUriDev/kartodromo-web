@@ -1,49 +1,118 @@
-import Header from '../components/Header';
+import Link from 'next/link';
 import Services from '../components/Services';
+import PackagesSection from '../components/PackagesSection';
 import Location from '../components/Location';
 import RestaurantMenu from '../components/RestaurantMenu';
 import Gallery from '../components/Gallery';
+import FaqSection from '../components/FaqSection';
 import Footer from '../components/Footer';
 import FloatingWhatsApp from '../components/FloatingWhatsApp';
+import { ShoppingBag, Calendar, Gauge, ShieldCheck, Trophy, ChevronRight, Zap } from 'lucide-react';
 
 export default function Home() {
   return (
     <>
-      {/* 1. El Header va primero y fijo arriba */}
-      <Header />
+      {/* SECCIÓN HERO - MOTORSPORT DARK MODE */}
+      <main id="inicio" className="relative min-h-[92vh] bg-black text-white flex flex-col items-center justify-center px-4 pt-28 pb-20 overflow-hidden">
 
-      {/* 2. La Sección Hero (Inicio) */}
-      <main id="inicio" className="min-h-screen bg-gradient-to-br from-black via-zinc-900 to-red-950 text-white flex flex-col items-center justify-center px-4 pt-20">
-        <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-center mb-4 tracking-tight leading-tight px-4">
-          <span className="text-red-500">KART</span>ÓDROMO <br className="hidden sm:block" />
-          <span className="text-yellow-400 mx-2">&</span>
-          <br className="hidden sm:block" />
-          <span className="text-red-500">MOTO</span>ÓDROMO
-        </h1>
-        <h2 className="text-2xl md:text-3xl font-light text-zinc-300 mb-6 text-center">
-          SABANETA
-        </h2>
-        <p className="text-zinc-400 text-center max-w-xl mb-8 text-lg">
-          Go-karts, Motódromo, Gotcha y restaurante. La adrenalina te espera.
-        </p>
-        <a
-          href="https://wa.me/547141087330?text=Hola!%20Quiero%20reservar%20un%20turno"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-full shadow-lg shadow-green-500/50 transition-all hover:scale-105 flex items-center gap-3"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
-          </svg>
-          Reservar por WhatsApp
-        </a>
-        <div className="absolute bottom-8 animate-bounce text-zinc-500">↓</div>
+        {/* Fondo con patrones y degradados dinámicos */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-red-950/40 via-zinc-950/90 to-black pointer-events-none" />
+
+        {/* Líneas de carreras decorativas */}
+        <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
+
+        {/* Resplandor central rojo racing */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-red-600/15 rounded-full blur-[140px] pointer-events-none" />
+
+        <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center">
+
+          {/* Badge Estado de Pista */}
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-zinc-900/90 border border-zinc-800 text-xs font-bold uppercase tracking-wider text-zinc-300 mb-6 shadow-xl backdrop-blur-md">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
+            <span className="w-2 h-2 rounded-full bg-emerald-500 -ml-4" />
+            <span className="text-white">Pista Abierta</span>
+            <span className="text-zinc-600">•</span>
+            <span className="text-zinc-400">La Marquesa, Edo. Méx.</span>
+          </div>
+
+          {/* Título Principal de Impacto */}
+          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.95] mb-6">
+            <span className="block text-white">SIENTE LA</span>
+            <span className="block bg-gradient-to-r from-red-500 via-red-600 to-amber-500 bg-clip-text text-transparent">
+              VELOCIDAD PURA
+            </span>
+          </h1>
+
+          {/* Subtítulo descriptivo */}
+          <p className="text-zinc-300 text-base sm:text-xl max-w-2xl mb-10 leading-relaxed font-light">
+            El circuito de Go-Karts, Motódromo y Gotcha más emocionante de la región.
+            Pista reglamentaria con telemetría en vivo, karts de alto rendimiento y restaurante de asados en pits.
+          </p>
+
+          {/* Botones de Acción (CTAs principales) */}
+          <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mb-14">
+            <Link
+              href="/comprar"
+              className="w-full sm:w-auto bg-gradient-to-r from-red-600 via-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-black text-base px-8 py-4 rounded-2xl shadow-xl shadow-red-600/30 hover:shadow-red-600/50 hover:scale-[1.02] transition-all flex items-center justify-center gap-3 border border-red-500/30"
+            >
+              <ShoppingBag className="w-5 h-5" />
+              <span>Comprar Pases Online</span>
+              <ChevronRight className="w-4 h-4 ml-1" />
+            </Link>
+
+            <Link
+              href="/reservar"
+              className="w-full sm:w-auto bg-zinc-900/90 hover:bg-zinc-800 text-white font-bold text-base px-8 py-4 rounded-2xl border border-zinc-700/80 hover:border-zinc-500 transition-all flex items-center justify-center gap-3 shadow-lg"
+            >
+              <Calendar className="w-5 h-5 text-red-500" />
+              <span>Reservar Horario</span>
+            </Link>
+          </div>
+
+          {/* Métricas y Stats de Pista */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 w-full max-w-4xl pt-8 border-t border-zinc-800/80">
+            <div className="flex flex-col items-center p-3 rounded-2xl bg-zinc-950/60 border border-zinc-900">
+              <div className="flex items-center gap-2 text-red-500 mb-1">
+                <Gauge className="w-5 h-5" />
+                <span className="text-2xl sm:text-3xl font-black text-white">850m</span>
+              </div>
+              <span className="text-xs text-zinc-400 font-medium">Longitud de Pista</span>
+            </div>
+
+            <div className="flex flex-col items-center p-3 rounded-2xl bg-zinc-950/60 border border-zinc-900">
+              <div className="flex items-center gap-2 text-amber-500 mb-1">
+                <Zap className="w-5 h-5" />
+                <span className="text-2xl sm:text-3xl font-black text-white">270cc</span>
+              </div>
+              <span className="text-xs text-zinc-400 font-medium">Karts Honda 4T</span>
+            </div>
+
+            <div className="flex flex-col items-center p-3 rounded-2xl bg-zinc-950/60 border border-zinc-900">
+              <div className="flex items-center gap-2 text-emerald-500 mb-1">
+                <Trophy className="w-5 h-5" />
+                <span className="text-2xl sm:text-3xl font-black text-white">Compite</span>
+              </div>
+              <span className="text-xs text-zinc-400 font-medium">Personal de apoyo</span>
+            </div>
+
+            <div className="flex flex-col items-center p-3 rounded-2xl bg-zinc-950/60 border border-zinc-900">
+              <div className="flex items-center gap-2 text-purple-500 mb-1">
+                <ShieldCheck className="w-5 h-5" />
+                <span className="text-2xl sm:text-3xl font-black text-white">100%</span>
+              </div>
+              <span className="text-xs text-zinc-400 font-medium">Seguridad y Cascos</span>
+            </div>
+          </div>
+
+        </div>
+
       </main>
 
-      {/* 3. El resto de las secciones */}
+      {/* SECCIONES DEL SITIO */}
       <Services />
+      <PackagesSection />
       <Gallery />
-      <RestaurantMenu />
+      <FaqSection />
       <Location />
       <Footer />
       <FloatingWhatsApp />
